@@ -32,13 +32,13 @@ export default function ContestsScreen() {
           .filter(
             (contest: ContestData) =>
               contest.startTimeSeconds * 1000 < Date.now() &&
-              user.ratingChanges[`${contest.id}`]
+              (!user.ratingChanges || user.ratingChanges[`${contest.id}`])
           )
           .map((contest: ContestData) => {
             return {
               ...contest,
               isCompleted: true,
-              userRatingChange: user.ratingChanges[`${contest.id}`]
+              userRatingChange: user.ratingChanges?.[`${contest.id}`]
                 ? user.ratingChanges[`${contest.id}`].newRating -
                   user.ratingChanges[`${contest.id}`].oldRating
                 : undefined,

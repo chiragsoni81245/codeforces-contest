@@ -18,11 +18,11 @@ type RatingChanges = {
 }
 
 type UserDetails = {
-  ratingChanges: RatingChanges
+  ratingChanges: RatingChanges | undefined
 }
 
 const initialState: UserDetails = {
-  ratingChanges: {},
+  ratingChanges: undefined,
 }
 
 const reducer = (
@@ -77,7 +77,7 @@ export function UserProvider({ children }: { children: any }) {
   }
 
   async function loadUserDetails(silent: boolean = false) {
-    if (typeof settings.handle === 'undefined') return
+    if (typeof settings.handle === 'undefined') return setLoading(false)
     if (!silent) setLoading(true)
     // Loading User Stats
     const [ratingChanges, error] = await getUserRatingChanges(settings.handle)
