@@ -4,7 +4,7 @@
     "slug": "codefoces-contest",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/cf-icon.png",
     "scheme": "codeforces-contest",
     "userInterfaceStyle": "automatic",
     "splash": {
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/icon.png",
+        "foregroundImage": "./assets/images/cf-icon.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.anonymous.codefocescontest"
