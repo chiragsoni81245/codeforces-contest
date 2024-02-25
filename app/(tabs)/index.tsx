@@ -13,11 +13,12 @@ export default function ContestsScreen() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<unknown>(null)
   const { createCalendarEvent } = useCalander()
-  const { user } = useUser()
+  const { user, loadUserDetails } = useUser()
 
   const loadContests = async () => {
     setLoading(true)
     try {
+      await loadUserDetails(true)
       // Logic to fetch contest info from Codeforces API
       const response = await axios.get(
         'https://codeforces.com/api/contest.list'

@@ -37,7 +37,13 @@ const reducer = (
   return newState
 }
 
-export const UserContext = React.createContext<UserDetails>(initialState)
+export const UserContext = React.createContext<{
+  user: UserDetails
+  loadUserDetails: Function
+}>({
+  user: initialState,
+  loadUserDetails: async () => {},
+})
 export const UserDispatchContext = React.createContext<any>(null)
 
 export function UserProvider({ children }: { children: any }) {
@@ -81,6 +87,7 @@ export function UserProvider({ children }: { children: any }) {
           ratingChanges,
         },
       })
+      setError(null)
     } else {
       setError(error)
     }
@@ -114,7 +121,7 @@ export function UserProvider({ children }: { children: any }) {
   }
 
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={{ user, loadUserDetails }}>
       <UserDispatchContext.Provider value={dispatch}>
         {children}
       </UserDispatchContext.Provider>

@@ -4,25 +4,14 @@ import React, { useReducer, useEffect, useState } from 'react'
 import { ActivityIndicator, StyleSheet } from 'react-native'
 import { MMKV } from 'react-native-mmkv'
 
-type RatingChange = {
-  contestName: string
-  contestId: number
-  oldRating: number
-  newRating: number
-  rank: number
-  ratingUpdateTimeSeconds: number
-}
-
 type Settings = {
   handle: string | undefined
   lastContestsRatingChange: number
-  ratingChanges: RatingChange[] | null
 }
 
 const initialState: Settings = {
   handle: undefined,
   lastContestsRatingChange: 10,
-  ratingChanges: [],
 }
 
 const reducer = (
@@ -49,24 +38,6 @@ export function SettingsProvider({ children }: { children: any }) {
   const [loading, setLoading] = useState<boolean>(true)
   const [settings, dispatch] = useReducer(reducer, initialState)
 
-  async function getUserRatingChanges(
-    handle: string
-  ): Promise<[RatingChange[] | null, string | null]> {
-    try {
-      // Logic to fetch contest info from Codeforces API
-      const response = await axios.get(
-        `https://codeforces.com/api/user.rating?handle=${handle}`
-      )
-      return [response.data.result, null]
-    } catch (error) {
-      console.error(error)
-      if (error instanceof Error) {
-        return [null, error.message]
-      }
-      return [null, 'Something went wrong while fetching user rating changes!']
-    }
-  }
-
   useEffect(() => {
     const localSotrage = new MMKV()
     ;(async () => {
@@ -74,17 +45,6 @@ export function SettingsProvider({ children }: { children: any }) {
         localSotrage.getString('settings')
       if (settingsString) {
         const settings: Settings = JSON.parse(settingsString)
-        if (settings.handle) {
-          // Loading User Stats
-          const [ratingChanges, error] = await getUserRatingChanges(
-            settings.handle
-          )
-          if (!error) {
-            settings['ratingChanges'] = ratingChanges
-          } else {
-            throw new Error(error)
-          }
-        }
         dispatch({
           payload: settings,
         })
@@ -92,21 +52,6 @@ export function SettingsProvider({ children }: { children: any }) {
       setLoading(false)
     })()
   }, [])
-
-  useEffect(() => {
-    // Refresh User Ratings when handle changes
-    ;(async () => {
-      if (typeof settings.handle === 'undefined') return
-
-      // Loading User Stats
-      const [ratingChanges, error] = await getUserRatingChanges(settings.handle)
-      if (!error) {
-        settings['ratingChanges'] = ratingChanges
-      } else {
-        throw new Error(error)
-      }
-    })()
-  }, [settings.handle])
 
   if (loading) {
     return (
