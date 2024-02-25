@@ -10,6 +10,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
 import { useColorScheme } from '@/components/useColorScheme'
 import { SettingsProvider } from '@/contexts/settings'
+import { UserProvider } from '@/contexts/user'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -54,9 +55,11 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <SettingsProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        </Stack>
+        <UserProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          </Stack>
+        </UserProvider>
       </SettingsProvider>
     </ThemeProvider>
   )

@@ -2,9 +2,11 @@ export type ContestData = {
   id: number
   name: string
   phase: string
-  duration: number
+  durationSeconds: number
   startTimeSeconds: number
   relativeTimeSeconds: number
+  userRatingChange: number | undefined
+  isCompleted?: boolean
 }
 
 export type EventData = {
